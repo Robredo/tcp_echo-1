@@ -24,11 +24,14 @@ int main(){
   serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
   serverAddress.sin_port = htons(5000);
   bind(serverSocket, (struct sockaddr*) &serverAddress, sizeof(serverAddress));
-  listen(serverSocket, SOMAXCONN);
+  if(listen(serverSocket, SOMAXCONN) < 0)
+    exit(5);
   for(;;){
     struct sockaddr_in clientAddress;
     socklen_t clientAddrLen = sizeof(clientAddress);
     int clientSocket = accept(serverSocket, (struct sockaddr *) &clientAddress, &clientAddrLen );
+    if(clientSocket < 0)
+      exit(5);
     char clientIp[INET_ADDRSTRLEN];
     inet_ntop(AF_INET, &clientAddress.sin_addr.s_addr, clientIp, sizeof(clientIp));
     printf("%s %d\n", clientIp, ntohs(clientAddress.sin_port));
