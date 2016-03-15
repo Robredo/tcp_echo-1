@@ -17,12 +17,12 @@ void handleTCPEchoClient(int clientSocket){
 void handleTimeClient(){}
 
 int main(){
-  int serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-  struct sockaddr_in serverAddress;
+  int serverSocket = socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
+  struct sockaddr_in6 serverAddress;
   memset(&serverAddress, 0, sizeof(serverAddress));
-  serverAddress.sin_family = AF_INET;
-  serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
-  serverAddress.sin_port = htons(5000);
+  serverAddress.sin6_family = AF_INET6;
+  serverAddress.sin6_addr = in6addr_any;
+  serverAddress.sin6_port = htons(5000);
   bind(serverSocket, (struct sockaddr*) &serverAddress, sizeof(serverAddress));
   if(listen(serverSocket, SOMAXCONN) < 0)
     exit(5);

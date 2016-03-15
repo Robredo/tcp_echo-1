@@ -6,15 +6,21 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <errno.h>
 
-int main(int x, char *argv[]){
+int main(int argc, char *argv[]){
   int sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
   struct sockaddr_in server_address;
   memset(&server_address, 0, sizeof(server_address));
-  int ip = inet_pton(AF_INET, "148.201.210.36", &server_address.sin_addr.s_addr);
+  int ip = inet_pton(AF_INET, "10.0.1.4", &server_address.sin_addr.s_addr);
   server_address.sin_family = AF_INET;
   server_address.sin_port = htons(4999);
-  bind(sock, (struct sockaddr*) &server_address, sizeof(server_address));
+  int x = bind(sock, (struct sockaddr*) &server_address, sizeof(server_address));
+  if(x == -1){
+    printf("%s", strerror(errno));
+  }
+  printf("%d", x);
+  ip = inet_pton(AF_INET, "10.0.1.2", &server_address.sin_addr.s_addr);
   server_address.sin_port = htons(5000);
   if(connect(sock, (struct sockaddr *) &server_address, sizeof(server_address))<0)
     exit(5);
@@ -33,7 +39,7 @@ int main(int x, char *argv[]){
     buffer[numBytes] = '\0';
     fputs(buffer, stdout);
   }
-  close(sock);
+  printf("%d", close(sock));
   printf("\n");
   return 0; 
 }
