@@ -8,8 +8,10 @@
 #include <stdlib.h>
 #include <errno.h>
 
+
+// Este codigo es el del cliente, inicia la comunicacion con el server, le envia un string e imprime la respuesta del server
 int main(int argc, char *argv[]){
-  int sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+  int sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP); //# Creacion del socket con IPv4
   struct sockaddr_in server_address;
   memset(&server_address, 0, sizeof(server_address));
   int ip = inet_pton(AF_INET, "10.0.1.4", &server_address.sin_addr.s_addr);
@@ -21,7 +23,7 @@ int main(int argc, char *argv[]){
   }
   printf("%d", x);
   ip = inet_pton(AF_INET, "10.0.1.2", &server_address.sin_addr.s_addr);
-  server_address.sin_port = htons(5000);
+  server_address.sin_port = htons(5000); //Puerto a utilizar
   if(connect(sock, (struct sockaddr *) &server_address, sizeof(server_address))<0)
     exit(5);
   char *echoString = "hi";
